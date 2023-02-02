@@ -16,7 +16,7 @@ class Piece():
     def get_name(self):
         return self.name
     
-    def get_valid_moves(self, fuck, shit):
+    def get_valid_moves(self, x, y):
         pass
 
 class Rook(Piece):
