@@ -61,21 +61,24 @@ class Board():
         
     def move_piece(self, piece, dest):
         selectedPiece = self.board[piece[0]][piece[1]]
-        print(selectedPiece.get_valid_moves(self.board, piece))
+        if selectedPiece.is_valid_move(self.board, piece, dest):
+            print("valid move")
+        else:
+            print("not valid move")
         if self.check_castle(selectedPiece, piece, dest):
             self.board[dest[0]][ dest[1]] = selectedPiece
             selectedPiece.has_moved()
             self.board[piece[0]][piece[1]] = None
     def check_castle(self, king, start, dest):
-        print('castle check started')
+        #print('castle check started')
         if king.get_name() == "K" and king.is_first_move():
-            print('piece is king and it is the first move')
-            print(dest[0])
+            #print('piece is king and it is the first move')
+            #print(dest[0])
             if dest[1] == 1 and self.board[start[0]][0]:
-                print('king is moving left and a piece exists on the rook square')
+                #print('king is moving left and a piece exists on the rook square')
                 rook = self.board[start[0]][0]
                 if rook.get_name() == "R" and rook.is_first_move():
-                    print('rook square is a rook and the rook has not moved yet')
+                    #print('rook square is a rook and the rook has not moved yet')
                     self.board[dest[0]][dest[1]] = king
                     king.has_moved()
                     self.board[start[0]][start[1]] = None
@@ -84,7 +87,7 @@ class Board():
                     self.board[start[0]][0] = None
                     return False
             if dest[1] == 6 and self.board[start[0]][7]:
-                print('king is moving right and a piece exists on the rook square')
+                #print('king is moving right and a piece exists on the rook square')
                 rook = self.board[start[0]][7]
                 if rook.get_name() == "R" and rook.is_first_move():
                     self.board[dest[0]][dest[1]] = king
