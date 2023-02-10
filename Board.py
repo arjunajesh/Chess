@@ -61,14 +61,16 @@ class Board():
         
     def move_piece(self, piece, dest):
         selectedPiece = self.board[piece[0]][piece[1]]
-        if selectedPiece.is_valid_move(self.board, piece, dest):
+        if selectedPiece.is_valid_move(self, piece, dest):
             print("valid move")
         else:
             print("not valid move")
+
         if self.check_castle(selectedPiece, piece, dest):
             self.board[dest[0]][ dest[1]] = selectedPiece
             selectedPiece.has_moved()
             self.board[piece[0]][piece[1]] = None
+
     def check_castle(self, king, start, dest):
         #print('castle check started')
         if king.get_name() == "K" and king.is_first_move():
@@ -98,6 +100,9 @@ class Board():
                     self.board[start[0]][7] = None
                     return False
         return True
+    
+    def square_on_board(self, square):
+        return square[0] >= 0 and square[0] < 8 and square[1] >= 0 and square[1] < 8
 
                 
                 

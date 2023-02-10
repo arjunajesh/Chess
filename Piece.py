@@ -62,7 +62,7 @@ class Rook(Piece):
         self.name = "R"
     
     def is_valid_move(self, board, pos, dest):
-        return self.check_straight_move(board, pos, dest)
+        return self.check_straight_move(board.board, pos, dest)
         
 
 
@@ -71,13 +71,26 @@ class Knight(Piece):
         super().__init__(color)
         self.name = "N"
 
+    def is_valid_move(self, board, pos, dest):
+        return dest in self.get_moves(board, pos)
+
+    def get_moves(self,board, pos):
+        directions = [[2,1], [2,-1], [-2, 1], [-2,-1], [1,2], [1,-2], [-1,2],[-1,-2]]
+        moves = []
+        for dir in directions:
+            move = [pos[0] + dir[0], pos[1] + dir[1]]
+            if board.square_on_board(move) and (not board.board[move[0]][move[1]] or board.board[move[0]][move[1]].get_color() != self.get_color()):
+                moves.append(move)
+        return moves
+
+
 class Bishop(Piece):
     def __init__(self, color):
         super().__init__(color)
         self.name = "B"
 
     def is_valid_move(self, board, pos, dest):
-        return self.check_diag_move(board, pos, dest)
+        return self.check_diag_move(board.board, pos, dest)
             
 
 
@@ -85,18 +98,26 @@ class Queen(Piece):
     def __init__(self, color):
         super().__init__(color)
         self.name = "Q"
+    
+    def is_valid_move(self, board, pos, dest):
+        return self.check_diag_move(board.board, pos, dest) or self.check_straight_move(board.board, pos, dest)
 
 class King(Piece):
     def __init__(self, color):
         super().__init__(color)
         self.name = "K"
-    #     self.first_move = True
-
-    # def is_first_move(self):
-    #     return self.first_move
     
-    # def has_moved(self):
-    #     self.first_move = False
+    def is_valid_move(self, board, pos, dest):
+        dirs = [-1 , 0 , 1]
+        for x in dirs:
+            for y in dirs:
+                sq = [pos[0] + x, pos[1] + y]
+                if dest == sq:
+                    return not board.board[dest[0]][dest[1]] or board.board[dest[0]][dest[1]].get_color() != self.get_color()
+        return False
+
+
+
 
 class Pawn(Piece):
     def __init__(self, color):
@@ -104,7 +125,7 @@ class Pawn(Piece):
         self.name = "p"
 
     def is_valid_move(self, board, pos, dest):
-        return dest in self.get_valid_moves(board, pos)
+        return dest in self.get_valid_moves(board.board, pos)
             
 
     def get_valid_moves(self, board, pos):
